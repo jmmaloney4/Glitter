@@ -60,14 +60,15 @@ int main(int argc, char* argv[]) {
     GLuint vbo;
     glGenBuffers(1, &vbo);
     float vertices[] = {
-        -0.5f, 0.5f,  1.0f,
-        0.0f,  0.0f, // Top-left
-        0.5f,  0.5f,  0.0f,
-        1.0f,  0.0f, // Top-right
-        0.5f,  -0.5f, 0.0f,
-        0.0f,  1.0f, // Bottom-right
-        -0.5f, -0.5f, 0.0f,
-        0.5f,  0.5f // Bottom-left
+        //  Position (2), Color (3), Texcoords (2)
+        -0.5f, 0.5f,  1.0f, 0.0f,
+        0.0f,  0.0f,  0.0f, // Top-left
+        0.5f,  0.5f,  0.0f, 1.0f,
+        0.0f,  1.0f,  0.0f, // Top-right
+        0.5f,  -0.5f, 0.0f, 0.0f,
+        1.0f,  1.0f,  1.0f, // Bottom-right
+        -0.5f, -0.5f, 1.0f, 1.0f,
+        1.0f,  0.0f,  1.0f // Bottom-left
     };
     glBindBuffer(GL_ARRAY_BUFFER, vbo);
     glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
@@ -82,10 +83,13 @@ int main(int argc, char* argv[]) {
     const char* vertexSource = "#version 150\n"
                                "in vec2 in_position;\n"
                                "in vec3 in_color;\n"
+                               "in vec2 in_texcoord;\n"
                                "out vec3 color;\n"
+                               "out vec2 texcoord;\n"
                                "void main() {\n"
                                "gl_Position = vec4(in_position, 0.0, 1.0);\n"
-                               "color = in_color; }\n";
+                               "color = in_color;\n"
+                               "texcoord = in_texcoord; }";
     char buffer[512];
     shader vertexShader = shader(vertexSource, GL_VERTEX_SHADER);
     GLint status = vertexShader.compile(buffer, 512);
@@ -94,8 +98,11 @@ int main(int argc, char* argv[]) {
     const char* fragmentSource =
         "#version 150\n"
         "in vec3 color;\n"
+        "in vec2 texcoord;\n"
         "out vec4 outColor;\n"
-        "void main() { outColor = vec4(color, 1.0); }\n";
+        "uniform sampler2D sampler;\n"
+        "void main() { \n"
+        "outColor = texture(sampler, texcoord) * vec4(color, 1.0); }\n";
     shader fragmentShader = shader(fragmentSource, GL_FRAGMENT_SHADER);
     status = fragmentShader.compile(buffer, 512);
     handleShaderCompileErrors(status, buffer);
@@ -108,11 +115,15 @@ int main(int argc, char* argv[]) {
     handleShaderCompileErrors(status, buffer);
 
     shaderProgram.setAttributeArray("in_position", 2, GL_FLOAT, GL_FALSE,
-                                    5 * sizeof(float), 0);
+                                    7 * sizeof(float), 0);
 
     shaderProgram.setAttributeArray("in_color", 3, GL_FLOAT, GL_FALSE,
-                                    5 * sizeof(float),
+                                    7 * sizeof(float),
                                     (void*) (2 * sizeof(float)));
+
+    shaderProgram.setAttributeArray("in_texcoord", 2, GL_FLOAT, GL_FALSE,
+                                    7 * sizeof(float),
+                                    (void*) (5 * sizeof(float)));
 
     GLint uniColor = shaderProgram.getUniformLocation("color");
 
@@ -129,24 +140,21 @@ int main(int argc, char* argv[]) {
     int w;
     int h;
     int comp;
-    unsigned char* image =
+    unsigned char* imagePumpkin =
         stbi_load(path.c_str(), &w, &h, &comp, STBI_rgb_alpha);
 
-    if (image == nullptr) {
+    if (imagePumpkin == nullptr) {
         throw(std::string("Failed to load texture"));
     }
 
     std::cout << w << " x " << h << std::endl;
 
-    if (comp == 3) {
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, w, h, 0, GL_RGB,
-                     GL_UNSIGNED_BYTE, image);
-    } else if (comp == 4) {
-        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, w, h, 0, GL_RGBA,
-                     GL_UNSIGNED_BYTE, image);
-    }
+    path = assetsDirectoryPath + "/textures/destroy.png";
 
-    stbi_image_free(image);
+    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, w, h, 0, GL_RGBA, GL_UNSIGNED_BYTE,
+                 imagePumpkin);
+
+    stbi_image_free(imagePumpkin);
 
     glGenerateMipmap(GL_TEXTURE_2D);
 
