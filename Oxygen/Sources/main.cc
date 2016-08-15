@@ -5,16 +5,14 @@
 // This Source Code Form is subject to the terms of the Mozilla Public
 // License, v. 2.0. If a copy of the MPL was not distributed with this
 // file, You can obtain one at http://mozilla.org/MPL/2.0/.
-//
-// Based off Glitter. https://github.com/Polytonic/Glitter
 
 // Local Headers
 #include "glitter.h"
 #include "oxygen.h"
 
 // System Headers
-#include <glad/glad.h>
 #include <GLFW/glfw3.h>
+#include <glad/glad.h>
 
 // Standard Headers
 #include <cstdio>
@@ -57,18 +55,15 @@ int main(int argc, char* argv[]) {
     vao vertexArrayObject;
     vertexArrayObject.bind();
 
+    // Buffer Vertices
     GLuint vbo;
     glGenBuffers(1, &vbo);
     float vertices[] = {
-        //  Position (2), Color (3), Texcoords (2)
-        -0.5f, 0.5f,  1.0f, 0.0f,
-        0.0f,  0.0f,  0.0f, // Top-left
-        0.5f,  0.5f,  0.0f, 1.0f,
-        0.0f,  1.0f,  0.0f, // Top-right
-        0.5f,  -0.5f, 0.0f, 0.0f,
-        1.0f,  1.0f,  1.0f, // Bottom-right
-        -0.5f, -0.5f, 1.0f, 1.0f,
-        1.0f,  0.0f,  1.0f // Bottom-left
+        // Position (2),Color (3),       Texcoords (2)
+        -0.5f, 0.5f,  1.0f, 0.0f, 0.0f, 0.0f, 0.0f, // Top-left
+        0.5f,  0.5f,  0.0f, 1.0f, 0.0f, 1.0f, 0.0f, // Top-right
+        0.5f,  -0.5f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f, // Bottom-right
+        -0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f  // Bottom-left
     };
     glBindBuffer(GL_ARRAY_BUFFER, vbo);
     glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
@@ -80,6 +75,7 @@ int main(int argc, char* argv[]) {
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(elements), elements,
                  GL_STATIC_DRAW);
 
+    // Vertex Shader
     const char* vertexSource = "#version 150\n"
                                "in vec2 in_position;\n"
                                "in vec3 in_color;\n"
@@ -95,6 +91,7 @@ int main(int argc, char* argv[]) {
     GLint status = vertexShader.compile(buffer, 512);
     handleShaderCompileErrors(status, buffer);
 
+    // Fragment Shader
     const char* fragmentSource =
         "#version 150\n"
         "in vec3 color;\n"
@@ -137,24 +134,10 @@ int main(int argc, char* argv[]) {
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
     std::string path = assetsDirectoryPath + "/textures/pumpkin.png";
-    int w;
-    int h;
-    int comp;
-    unsigned char* imagePumpkin =
-        stbi_load(path.c_str(), &w, &h, &comp, STBI_rgb_alpha);
-
-    if (imagePumpkin == nullptr) {
-        throw(std::string("Failed to load texture"));
-    }
-
-    std::cout << w << " x " << h << std::endl;
+    texture pumpkinTexture = texture(path.c_str(), GL_TEXTURE0);
+    glUniform1i(shaderProgram.getUniformLocation("sampler"), 0);
 
     path = assetsDirectoryPath + "/textures/destroy.png";
-
-    glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, w, h, 0, GL_RGBA, GL_UNSIGNED_BYTE,
-                 imagePumpkin);
-
-    stbi_image_free(imagePumpkin);
 
     glGenerateMipmap(GL_TEXTURE_2D);
 
