@@ -22,7 +22,16 @@
 
 using namespace oxygen;
 
-int main() {
+int main(int argc, char* argv[]) {
+
+    if (argc < 2) {
+        std::cout << "Please specify assets directory. " << std::endl
+                  << argv[0] << " <asset-dir>" << std::endl;
+        exit(EXIT_FAILURE);
+    }
+
+    std::string assetsDirectoryPath = std::string(argv[1]);
+    std::cout << "Assets Directory: " << assetsDirectoryPath << std::endl;
 
     // Load GLFW and Create a Window
     glfwInit();
@@ -108,6 +117,38 @@ int main() {
     GLint uniColor = shaderProgram.getUniformLocation("color");
 
     std::cout << glGetError() << std::endl;
+
+    GLuint tex;
+    glGenTextures(1, &tex);
+    glBindTexture(GL_TEXTURE_2D, tex);
+
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+    std::string path = assetsDirectoryPath + "/textures/pumpkin.png";
+    int w;
+    int h;
+    int comp;
+    unsigned char* image =
+        stbi_load(path.c_str(), &w, &h, &comp, STBI_rgb_alpha);
+
+    if (image == nullptr) {
+        throw(std::string("Failed to load texture"));
+    }
+
+    std::cout << w << " x " << h << std::endl;
+
+    if (comp == 3) {
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, w, h, 0, GL_RGB,
+                     GL_UNSIGNED_BYTE, image);
+    } else if (comp == 4) {
+        glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, w, h, 0, GL_RGBA,
+                     GL_UNSIGNED_BYTE, image);
+    }
+
+    stbi_image_free(image);
+
+    glGenerateMipmap(GL_TEXTURE_2D);
 
     // Rendering Loop
     while (glfwWindowShouldClose(mWindow) == false) {
