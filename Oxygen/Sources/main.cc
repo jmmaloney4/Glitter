@@ -10,6 +10,7 @@
 
 // Local Headers
 #include "glitter.h"
+#include "oxygen.h"
 
 // System Headers
 #include <glad/glad.h>
@@ -18,6 +19,8 @@
 // Standard Headers
 #include <cstdio>
 #include <cstdlib>
+
+using namespace oxygen;
 
 int main() {
 
@@ -29,7 +32,7 @@ int main() {
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
     glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
     auto mWindow =
-        glfwCreateWindow(mWidth, mHeight, "OpenGL", nullptr, nullptr);
+        glfwCreateWindow(mWidth, mHeight, "Oxygen", nullptr, nullptr);
 
     // Check for Valid Context
     if (mWindow == nullptr) {
@@ -42,9 +45,8 @@ int main() {
     gladLoadGL();
     fprintf(stderr, "OpenGL %s\n", glGetString(GL_VERSION));
 
-    GLuint vao;
-    glGenVertexArrays(1, &vao);
-    glBindVertexArray(vao);
+    vao vertexArrayObject;
+    vertexArrayObject.bind();
 
     GLuint vbo;
     glGenBuffers(1, &vbo);
@@ -68,7 +70,6 @@ int main() {
     glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(elements), elements,
                  GL_STATIC_DRAW);
 
-    GLuint vertexShader = glCreateShader(GL_VERTEX_SHADER);
     const char* vertexSource = "#version 150\n"
                                "in vec2 in_position;\n"
                                "in vec3 in_color;\n"
@@ -76,57 +77,35 @@ int main() {
                                "void main() {\n"
                                "gl_Position = vec4(in_position, 0.0, 1.0);\n"
                                "color = in_color; }\n";
-    glShaderSource(vertexShader, 1, &vertexSource, NULL);
-    glCompileShader(vertexShader);
+    char buffer[512];
+    shader vertexShader = shader(vertexSource, GL_VERTEX_SHADER);
+    GLint status = vertexShader.compile(buffer, 512);
+    handleShaderCompileErrors(status, buffer);
 
-    {
-        GLint status;
-        glGetShaderiv(vertexShader, GL_COMPILE_STATUS, &status);
-        if (status != GL_TRUE) {
-            char buffer[512];
-            glGetShaderInfoLog(vertexShader, 512, NULL, buffer);
-            std::cout << status << ": " << buffer << std::endl;
-        }
-    }
-
-    GLuint fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
     const char* fragmentSource =
         "#version 150\n"
         "in vec3 color;\n"
         "out vec4 outColor;\n"
         "void main() { outColor = vec4(color, 1.0); }\n";
-    glShaderSource(fragmentShader, 1, &fragmentSource, NULL);
-    glCompileShader(fragmentShader);
+    shader fragmentShader = shader(fragmentSource, GL_FRAGMENT_SHADER);
+    status = fragmentShader.compile(buffer, 512);
+    handleShaderCompileErrors(status, buffer);
 
-    // Check Shader Compile Status
-    {
-        GLint status;
-        glGetShaderiv(vertexShader, GL_COMPILE_STATUS, &status);
-        if (status != GL_TRUE) {
-            char buffer[512];
-            glGetShaderInfoLog(vertexShader, 512, NULL, buffer);
-            std::cout << status << ": " << buffer << std::endl;
-        }
-    }
+    program shaderProgram = program();
+    shaderProgram.addShader(vertexShader);
+    shaderProgram.addShader(fragmentShader);
+    status = shaderProgram.link(buffer, 512);
+    shaderProgram.use();
+    handleShaderCompileErrors(status, buffer);
 
-    GLuint shaderProgram = glCreateProgram();
-    glAttachShader(shaderProgram, vertexShader);
-    glAttachShader(shaderProgram, fragmentShader);
-    glBindFragDataLocation(shaderProgram, 0, "outColor");
-    glLinkProgram(shaderProgram);
-    glUseProgram(shaderProgram);
+    shaderProgram.setAttributeArray("in_position", 2, GL_FLOAT, GL_FALSE,
+                                    5 * sizeof(float), 0);
 
-    GLint posAttrib = glGetAttribLocation(shaderProgram, "in_position");
-    glEnableVertexAttribArray(posAttrib);
-    glVertexAttribPointer(posAttrib, 2, GL_FLOAT, GL_FALSE, 5 * sizeof(float),
-                          0);
+    shaderProgram.setAttributeArray("in_color", 3, GL_FLOAT, GL_FALSE,
+                                    5 * sizeof(float),
+                                    (void*) (2 * sizeof(float)));
 
-    GLint colorAttrib = glGetAttribLocation(shaderProgram, "in_color");
-    glEnableVertexAttribArray(colorAttrib);
-    glVertexAttribPointer(colorAttrib, 3, GL_FLOAT, GL_FALSE, 5 * sizeof(float),
-                          (void*) (2 * sizeof(float)));
-
-    GLint uniColor = glGetUniformLocation(shaderProgram, "color");
+    GLint uniColor = shaderProgram.getUniformLocation("color");
 
     std::cout << glGetError() << std::endl;
 

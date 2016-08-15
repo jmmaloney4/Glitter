@@ -24,8 +24,4 @@
 const int mWidth = 1280;
 const int mHeight = 800;
 
-// Game Headers
-// #include "block.hpp"
-// #include "chunk.hpp"
-
 #endif //~ Glitter Header

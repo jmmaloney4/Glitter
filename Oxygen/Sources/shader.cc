@@ -8,4 +8,11 @@
 //
 // Based off Glitter. https://github.com/Polytonic/Glitter
 
-#include <stdio.h>
+#include "shader.h"
+
+void oxygen::handleShaderCompileErrors(GLint status, char* buffer) {
+    if (status != GL_TRUE) {
+        std::cout << "Compile Error (" << status << "): " << buffer
+                  << std::endl;
+    }
+}

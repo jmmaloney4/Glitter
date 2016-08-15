@@ -1,22 +1,22 @@
 cmake_minimum_required(VERSION 3.0)
-project(Glitter)
+project(Oxygen)
 
 option(GLFW_BUILD_DOCS OFF)
 option(GLFW_BUILD_EXAMPLES OFF)
 option(GLFW_BUILD_TESTS OFF)
-add_subdirectory(Glitter/Vendor/glfw)
+add_subdirectory(Oxygen/Vendor/glfw)
 
 option(ASSIMP_BUILD_ASSIMP_TOOLS OFF)
 option(ASSIMP_BUILD_SAMPLES OFF)
 option(ASSIMP_BUILD_TESTS OFF)
-add_subdirectory(Glitter/Vendor/assimp)
+add_subdirectory(Oxygen/Vendor/assimp)
 
 option(BUILD_BULLET2_DEMOS OFF)
 option(BUILD_CPU_DEMOS OFF)
 option(BUILD_EXTRAS OFF)
 option(BUILD_OPENGL3_DEMOS OFF)
 option(BUILD_UNIT_TESTS OFF)
-add_subdirectory(Glitter/Vendor/bullet)
+add_subdirectory(Oxygen/Vendor/bullet)
 
 if(MSVC)
     set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} /W4")
@@ -27,21 +27,21 @@ else()
     endif()
 endif()
 
-include_directories(Glitter/Headers/
-                    Glitter/Vendor/assimp/include/
-                    Glitter/Vendor/bullet/src/
-                    Glitter/Vendor/glad/include/
-                    Glitter/Vendor/glfw/include/
-                    Glitter/Vendor/glm/
-                    Glitter/Vendor/stb/)
+include_directories(Oxygen/Headers/
+                    Oxygen/Vendor/assimp/include/
+                    Oxygen/Vendor/bullet/src/
+                    Oxygen/Vendor/glad/include/
+                    Oxygen/Vendor/glfw/include/
+                    Oxygen/Vendor/glm/
+                    Oxygen/Vendor/stb/)
 
-file(GLOB VENDORS_SOURCES Glitter/Vendor/glad/src/glad.c)
-file(GLOB PROJECT_HEADERS Glitter/Headers/*.h)
-file(GLOB PROJECT_SOURCES Glitter/Sources/*.cc)
-file(GLOB PROJECT_SHADERS Glitter/Shaders/*.comp
-                          Glitter/Shaders/*.frag
-                          Glitter/Shaders/*.geom
-                          Glitter/Shaders/*.vert)
+file(GLOB VENDORS_SOURCES Oxygen/Vendor/glad/src/glad.c)
+file(GLOB PROJECT_HEADERS Oxygen/Headers/*.h)
+file(GLOB PROJECT_SOURCES Oxygen/Sources/*.cc)
+file(GLOB PROJECT_SHADERS Oxygen/Shaders/*.comp
+                          Oxygen/Shaders/*.frag
+                          Oxygen/Shaders/*.geom
+                          Oxygen/Shaders/*.vert)
 file(GLOB PROJECT_CONFIGS CMakeLists.txt
                           Readme.md
                          .gitattributes

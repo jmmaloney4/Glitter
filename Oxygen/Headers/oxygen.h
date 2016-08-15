@@ -1,4 +1,4 @@
-// Oxygen - shader.h
+// Oxygen - oxygen.h
 //
 // Copyright (C) Jack Maloney 2016
 //
@@ -8,8 +8,10 @@
 //
 // Based off Glitter. https://github.com/Polytonic/Glitter
 
-#ifndef OXYGEN_SHADER_H
-#define OXYGEN_SHADER_H
+#ifndef OXYGEN_OXYGEN_H
+#define OXYGEN_OXYGEN_H
 #pragma once
+
+#include "shader.h"
 
 #endif
