@@ -58,33 +58,72 @@ int main(int argc, char* argv[]) {
     // Buffer Vertices
     GLuint vbo;
     glGenBuffers(1, &vbo);
-    float vertices[] = {
-        // Position (2),Color (3),       Texcoords (2)
-        -0.5f, 0.5f,  1.0f, 0.0f, 0.0f, 0.0f, 0.0f, // Top-left
-        0.5f,  0.5f,  0.0f, 1.0f, 0.0f, 1.0f, 0.0f, // Top-right
-        0.5f,  -0.5f, 0.0f, 0.0f, 1.0f, 1.0f, 1.0f, // Bottom-right
-        -0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f  // Bottom-left
+    // clang-format off
+    GLfloat vertices[] = {
+        -0.5f, -0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 0.0f,
+        0.5f, -0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f,
+        0.5f,  0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f,
+        0.5f,  0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f,
+        -0.5f,  0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f,
+        -0.5f, -0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 0.0f,
+        
+        -0.5f, -0.5f,  0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 0.0f,
+        0.5f, -0.5f,  0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f,
+        0.5f,  0.5f,  0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f,
+        0.5f,  0.5f,  0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f,
+        -0.5f,  0.5f,  0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f,
+        -0.5f, -0.5f,  0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 0.0f,
+        
+        -0.5f,  0.5f,  0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f,
+        -0.5f,  0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f,
+        -0.5f, -0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f,
+        -0.5f, -0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f,
+        -0.5f, -0.5f,  0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 0.0f,
+        -0.5f,  0.5f,  0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f,
+        
+        0.5f,  0.5f,  0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f,
+        0.5f,  0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f,
+        0.5f, -0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f,
+        0.5f, -0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f,
+        0.5f, -0.5f,  0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 0.0f,
+        0.5f,  0.5f,  0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f,
+        
+        -0.5f, -0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f,
+        0.5f, -0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f,
+        0.5f, -0.5f,  0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f,
+        0.5f, -0.5f,  0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f,
+        -0.5f, -0.5f,  0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 0.0f,
+        -0.5f, -0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f,
+        
+        -0.5f,  0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f,
+        0.5f,  0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f,
+        0.5f,  0.5f,  0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f,
+        0.5f,  0.5f,  0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f,
+        -0.5f,  0.5f,  0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 0.0f,
+        -0.5f,  0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f
     };
+    // clang-format on
+
     glBindBuffer(GL_ARRAY_BUFFER, vbo);
     glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-
-    GLuint ebo;
-    glGenBuffers(1, &ebo);
-    GLuint elements[] = {0, 1, 2, 2, 3, 0};
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(elements), elements,
-                 GL_STATIC_DRAW);
-
+    /*
+        GLuint ebo;
+        glGenBuffers(1, &ebo);
+        GLuint elements[] = {0, 1, 2, 2, 3, 0};
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
+        glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(elements), elements,
+                     GL_STATIC_DRAW);
+    */
     // Vertex Shader
     const char* vertexSource =
-        GLSL(in vec2 in_position; in vec3 in_color; in vec2 in_texcoord;
+        GLSL(in vec3 in_position; in vec3 in_color; in vec2 in_texcoord;
 
              out vec3 color; out vec2 texcoord;
 
              uniform mat4 mvp;
 
              void main() {
-                 gl_Position = mvp * vec4(in_position, 0.0, 1.0);
+                 gl_Position = mvp * vec4(in_position, 1.0);
                  color = in_color;
                  texcoord = in_texcoord;
              });
@@ -105,7 +144,7 @@ int main(int argc, char* argv[]) {
         void main() {
             vec4 texColor = texture(texsamp, texcoord);
             vec4 destroyColor = texture(destroysamp, texcoord);
-            outColor = mix(texColor, destroyColor, 0.5);
+            outColor = vec4(color, 1.0) * mix(texColor, destroyColor, 0.5);
         });
     shader fragmentShader = shader(fragmentSource, GL_FRAGMENT_SHADER);
     status = fragmentShader.compile(buffer, 512);
@@ -118,16 +157,16 @@ int main(int argc, char* argv[]) {
     shaderProgram.use();
     handleShaderCompileErrors(status, buffer);
 
-    shaderProgram.setAttributeArray("in_position", 2, GL_FLOAT, GL_FALSE,
-                                    7 * sizeof(float), 0);
+    shaderProgram.setAttributeArray("in_position", 3, GL_FLOAT, GL_FALSE,
+                                    8 * sizeof(float), 0);
 
     shaderProgram.setAttributeArray("in_color", 3, GL_FLOAT, GL_FALSE,
-                                    7 * sizeof(float),
-                                    (void*) (2 * sizeof(float)));
+                                    8 * sizeof(float),
+                                    (void*) (3 * sizeof(float)));
 
     shaderProgram.setAttributeArray("in_texcoord", 2, GL_FLOAT, GL_FALSE,
-                                    7 * sizeof(float),
-                                    (void*) (5 * sizeof(float)));
+                                    8 * sizeof(float),
+                                    (void*) (6 * sizeof(float)));
 
     GLuint tex;
     glGenTextures(1, &tex);
@@ -153,15 +192,12 @@ int main(int argc, char* argv[]) {
         glm::rotate(model, glm::radians(180.0f), glm::vec3(0.0f, 0.0f, 1.0f));
 
     glm::mat4 view =
-        glm::lookAt(glm::vec3(0.0f, 1.5f, 1.5f), glm::vec3(0.0f, 0.0f, 0.0f),
+        glm::lookAt(glm::vec3(1.5f, 1.5f, 1.5f), glm::vec3(0.0f, 0.0f, 0.0f),
                     glm::vec3(0.0f, 1.0f, 0.0f));
     glm::mat4 proj =
         glm::perspective(glm::radians(75.0f), 800.0f / 800.0f, 0.1f, 100.0f);
 
     glm::mat4 mvp = proj * view * model;
-
-    glm::vec4 result = mvp * glm::vec4(0.5f, 0.5f, 0.0f, 1.0f);
-    printf("%f, %f, %f\n", result.x, result.y, result.z);
 
     glUniformMatrix4fv(shaderProgram.getUniformLocation("mvp"), 1, GL_FALSE,
                        glm::value_ptr(mvp));
@@ -176,9 +212,10 @@ int main(int argc, char* argv[]) {
 
         // Background Fill Color
         glClearColor(0.25f, 0.25f, 0.25f, 1.0f);
-        glClear(GL_COLOR_BUFFER_BIT);
+        glEnable(GL_DEPTH_TEST);
+        glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        glDrawElements(GL_TRIANGLES, 6, GL_UNSIGNED_INT, 0);
+        glDrawArrays(GL_TRIANGLES, 0, 36);
 
         // Flip Buffers and Draw
         glfwSwapBuffers(mWindow);
