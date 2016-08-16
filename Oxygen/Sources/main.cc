@@ -60,47 +60,53 @@ int main(int argc, char* argv[]) {
     glGenBuffers(1, &vbo);
     // clang-format off
     GLfloat vertices[] = {
-        -0.5f, -0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 0.0f,
-        0.5f, -0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f,
-        0.5f,  0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f,
-        0.5f,  0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f,
-        -0.5f,  0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f,
-        -0.5f, -0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 0.0f,
+        // Top (side 0) facing positive y
+        0.0f,  1.0f, 0.0f, 1.0f, 0.0f,
+        1.0f,  1.0f, 0.0f, 0.0f, 0.0f,
+        1.0f,  1.0f, 1.0f, 0.0f, 1.0f,
+        1.0f,  1.0f, 1.0f, 0.0f, 1.0f,
+        0.0f,  1.0f, 1.0f, 1.0f, 1.0f,
+        0.0f,  1.0f, 0.0f, 1.0f, 0.0f,
         
-        -0.5f, -0.5f,  0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 0.0f,
-        0.5f, -0.5f,  0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f,
-        0.5f,  0.5f,  0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f,
-        0.5f,  0.5f,  0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f,
-        -0.5f,  0.5f,  0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f,
-        -0.5f, -0.5f,  0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 0.0f,
+        // Front (side 1) facing positive z
+        0.0f, 0.0f, 1.0f, 1.0f, 1.0f,
+        1.0f, 0.0f, 1.0f, 0.0f, 1.0f,
+        1.0f, 1.0f, 1.0f, 0.0f, 0.0f,
+        1.0f, 1.0f, 1.0f, 0.0f, 0.0f,
+        0.0f, 1.0f, 1.0f, 1.0f, 0.0f,
+        0.0f, 0.0f, 1.0f, 1.0f, 1.0f,
         
-        -0.5f,  0.5f,  0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f,
-        -0.5f,  0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f,
-        -0.5f, -0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f,
-        -0.5f, -0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f,
-        -0.5f, -0.5f,  0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 0.0f,
-        -0.5f,  0.5f,  0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f,
+        // Right (side 2) facing positive x
+        1.0f, 1.0f, 1.0f, 1.0f, 0.0f,
+        1.0f, 1.0f, 0.0f, 0.0f, 0.0f,
+        1.0f, 0.0f, 0.0f, 0.0f, 1.0f,
+        1.0f, 0.0f, 0.0f, 0.0f, 1.0f,
+        1.0f, 0.0f, 1.0f, 1.0f, 1.0f,
+        1.0f, 1.0f, 1.0f, 1.0f, 0.0f,
         
-        0.5f,  0.5f,  0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f,
-        0.5f,  0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f,
-        0.5f, -0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f,
-        0.5f, -0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f,
-        0.5f, -0.5f,  0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 0.0f,
-        0.5f,  0.5f,  0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f,
+        // Back (side 3) facing negative z
+        0.0f, 0.0f, 0.0f, 1.0f, 1.0f,
+        1.0f, 0.0f, 0.0f, 0.0f, 1.0f,
+        1.0f, 1.0f, 0.0f, 0.0f, 0.0f,
+        1.0f, 1.0f, 0.0f, 0.0f, 0.0f,
+        0.0f, 1.0f, 0.0f, 1.0f, 0.0f,
+        0.0f, 0.0f, 0.0f, 1.0f, 1.0f,
         
-        -0.5f, -0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f,
-        0.5f, -0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f,
-        0.5f, -0.5f,  0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f,
-        0.5f, -0.5f,  0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f,
-        -0.5f, -0.5f,  0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 0.0f,
-        -0.5f, -0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f,
+        // Left (side 4) facing negative x
+        0.0f, 1.0f, 1.0f, 1.0f, 0.0f,
+        0.0f, 1.0f, 0.0f, 0.0f, 0.0f,
+        0.0f, 0.0f, 0.0f, 0.0f, 1.0f,
+        0.0f, 0.0f, 0.0f, 0.0f, 1.0f,
+        0.0f, 0.0f, 1.0f, 1.0f, 1.0f,
+        0.0f, 1.0f, 1.0f, 1.0f, 0.0f,
         
-        -0.5f,  0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f,
-        0.5f,  0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 1.0f,
-        0.5f,  0.5f,  0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f,
-        0.5f,  0.5f,  0.5f, 1.0f, 1.0f, 1.0f, 1.0f, 0.0f,
-        -0.5f,  0.5f,  0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 0.0f,
-        -0.5f,  0.5f, -0.5f, 1.0f, 1.0f, 1.0f, 0.0f, 1.0f
+        // Bottom (side 5) facing negative y
+        0.0f,  0.0f, 0.0f, 1.0f, 0.0f,
+        1.0f,  0.0f, 0.0f, 0.0f, 0.0f,
+        1.0f,  0.0f, 1.0f, 0.0f, 1.0f,
+        1.0f,  0.0f, 1.0f, 0.0f, 1.0f,
+        0.0f,  0.0f, 1.0f, 1.0f, 1.0f,
+        0.0f,  0.0f, 0.0f, 1.0f, 0.0f,
     };
     // clang-format on
 
@@ -116,15 +122,14 @@ int main(int argc, char* argv[]) {
     */
     // Vertex Shader
     const char* vertexSource =
-        GLSL(in vec3 in_position; in vec3 in_color; in vec2 in_texcoord;
+        GLSL(in vec3 in_position; in vec2 in_texcoord;
 
-             out vec3 color; out vec2 texcoord;
+             out vec2 texcoord;
 
              uniform mat4 model; uniform mat4 view; uniform mat4 proj;
 
              void main() {
                  gl_Position = proj * view * model * vec4(in_position, 1.0);
-                 color = in_color;
                  texcoord = in_texcoord;
              });
     char buffer[512];
@@ -135,7 +140,7 @@ int main(int argc, char* argv[]) {
     // Fragment Shader
     const char* fragmentSource = GLSL(
 
-        in vec3 color; in vec2 texcoord;
+        in vec2 texcoord;
 
         out vec4 outColor;
 
@@ -144,7 +149,7 @@ int main(int argc, char* argv[]) {
         void main() {
             vec4 texColor = texture(texsamp, texcoord);
             vec4 destroyColor = texture(destroysamp, texcoord);
-            outColor = vec4(color, 1.0) * mix(texColor, destroyColor, 0.5);
+            outColor = mix(texColor, destroyColor, 0.5);
         });
     shader fragmentShader = shader(fragmentSource, GL_FRAGMENT_SHADER);
     status = fragmentShader.compile(buffer, 512);
@@ -158,15 +163,11 @@ int main(int argc, char* argv[]) {
     handleShaderCompileErrors(status, buffer);
 
     shaderProgram.setAttributeArray("in_position", 3, GL_FLOAT, GL_FALSE,
-                                    8 * sizeof(float), 0);
-
-    shaderProgram.setAttributeArray("in_color", 3, GL_FLOAT, GL_FALSE,
-                                    8 * sizeof(float),
-                                    (void*) (3 * sizeof(float)));
+                                    5 * sizeof(float), 0);
 
     shaderProgram.setAttributeArray("in_texcoord", 2, GL_FLOAT, GL_FALSE,
-                                    8 * sizeof(float),
-                                    (void*) (6 * sizeof(float)));
+                                    5 * sizeof(float),
+                                    (void*) (3 * sizeof(float)));
 
     GLuint tex;
     glGenTextures(1, &tex);
@@ -188,7 +189,7 @@ int main(int argc, char* argv[]) {
     glGenerateMipmap(GL_TEXTURE_2D);
 
     glm::mat4 view =
-        glm::lookAt(glm::vec3(1.5f, 1.5f, 1.5f), glm::vec3(0.0f, 0.0f, 0.0f),
+        glm::lookAt(glm::vec3(8.0f, 10.5f, 11.5f), glm::vec3(8.0f, 0.0f, 0.0f),
                     glm::vec3(0.0f, 1.0f, 0.0f));
     glm::mat4 proj =
         glm::perspective(glm::radians(75.0f), 800.0f / 800.0f, 0.1f, 100.0f);
@@ -211,38 +212,42 @@ int main(int argc, char* argv[]) {
         glEnable(GL_DEPTH_TEST);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-        glm::mat4 model;
-        model = glm::rotate(model, glm::radians(180.0f),
-                            glm::vec3(0.0f, 0.0f, 1.0f));
-        glUniformMatrix4fv(shaderProgram.getUniformLocation("model"), 1,
-                           GL_FALSE, glm::value_ptr(model));
+        for (int l = 0; l < 16; l++) {
+            glm::mat4 m =
+                glm::translate(glm::mat4(), glm::vec3(0.0, 0.0, l * -1));
+            for (int k = 0; k < 16; k++) {
+                m = glm::translate(m, glm::vec3(1.0f, 0.0f, 0.0f));
+                glUniformMatrix4fv(shaderProgram.getUniformLocation("model"), 1,
+                                   GL_FALSE, glm::value_ptr(m));
+                glDrawArrays(GL_TRIANGLES, 0, 36);
+            }
+        }
 
-        glDrawArrays(GL_TRIANGLES, 0, 36);
+        /*
+                model = glm::translate(model, glm::vec3(1.0f, 0.0f, 0.0f));
+                glUniformMatrix4fv(shaderProgram.getUniformLocation("model"), 1,
+                                   GL_FALSE, glm::value_ptr(model));
 
-        model = glm::translate(model, glm::vec3(1.0f, 0.0f, 0.0f));
-        glUniformMatrix4fv(shaderProgram.getUniformLocation("model"), 1,
-                           GL_FALSE, glm::value_ptr(model));
+                glDrawArrays(GL_TRIANGLES, 0, 36);
 
-        glDrawArrays(GL_TRIANGLES, 0, 36);
+                model = glm::translate(model, glm::vec3(0.0, 0.0f, -1.0f));
+                glUniformMatrix4fv(shaderProgram.getUniformLocation("model"), 1,
+                                   GL_FALSE, glm::value_ptr(model));
 
-        model = glm::translate(model, glm::vec3(0.0, 0.0f, -1.0f));
-        glUniformMatrix4fv(shaderProgram.getUniformLocation("model"), 1,
-                           GL_FALSE, glm::value_ptr(model));
+                glDrawArrays(GL_TRIANGLES, 0, 36);
 
-        glDrawArrays(GL_TRIANGLES, 0, 36);
+                model = glm::translate(model, glm::vec3(-1.0f, 0.0f, 0.0f));
+                glUniformMatrix4fv(shaderProgram.getUniformLocation("model"), 1,
+                                   GL_FALSE, glm::value_ptr(model));
 
-        model = glm::translate(model, glm::vec3(-1.0f, 0.0f, 0.0f));
-        glUniformMatrix4fv(shaderProgram.getUniformLocation("model"), 1,
-                           GL_FALSE, glm::value_ptr(model));
+                glDrawArrays(GL_TRIANGLES, 0, 36);
 
-        glDrawArrays(GL_TRIANGLES, 0, 36);
+                model = glm::translate(model, glm::vec3(1.0f, -1.0f, 0.0));
+                glUniformMatrix4fv(shaderProgram.getUniformLocation("model"), 1,
+                                   GL_FALSE, glm::value_ptr(model));
 
-        model = glm::translate(model, glm::vec3(1.0f, -1.0f, 0.0));
-        glUniformMatrix4fv(shaderProgram.getUniformLocation("model"), 1,
-                           GL_FALSE, glm::value_ptr(model));
-
-        glDrawArrays(GL_TRIANGLES, 0, 36);
-
+                glDrawArrays(GL_TRIANGLES, 0, 36);
+        */
         // Flip Buffers and Draw
         glfwSwapBuffers(mWindow);
         glfwPollEvents();
