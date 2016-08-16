@@ -10,14 +10,6 @@
 #include "glitter.h"
 #include "oxygen.h"
 
-// System Headers
-#include <GLFW/glfw3.h>
-#include <glad/glad.h>
-
-// Standard Headers
-#include <cstdio>
-#include <cstdlib>
-
 using namespace oxygen;
 
 int main(int argc, char* argv[]) {
@@ -197,10 +189,10 @@ int main(int argc, char* argv[]) {
     glGenerateMipmap(GL_TEXTURE_2D);
 
     glm::mat4 view =
-        glm::lookAt(glm::vec3(25.0f, 11.5f, 11.5f), glm::vec3(8.0f, 0.0f, 0.0f),
+        glm::lookAt(glm::vec3(25.0f, 7.5f, 6.5f), glm::vec3(8.0f, 0.0f, 0.0f),
                     glm::vec3(0.0f, 1.0f, 0.0f));
     glm::mat4 proj =
-        glm::perspective(glm::radians(75.0f), 800.0f / 800.0f, 0.1f, 100.0f);
+        glm::perspective(glm::radians(60.0f), 800.0f / 800.0f, 0.1f, 100.0f);
 
     glUniformMatrix4fv(shaderProgram.getUniformLocation("view"), 1, GL_FALSE,
                        glm::value_ptr(view));
@@ -214,6 +206,9 @@ int main(int argc, char* argv[]) {
         if (glfwGetKey(mWindow, GLFW_KEY_ESCAPE) == GLFW_PRESS) {
             glfwSetWindowShouldClose(mWindow, true);
         }
+
+        fps::frame();
+        std::cout << "FPS: " << fps::calcFPS() << std::endl;
 
         // Background Fill Color
         glClearColor(0.25f, 0.25f, 0.25f, 1.0f);

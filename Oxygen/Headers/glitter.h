@@ -28,6 +28,7 @@
 #pragma once
 
 // System Headers
+#include <GLFW/glfw3.h>
 #include <assimp/Importer.hpp>
 #include <assimp/postprocess.h>
 #include <assimp/scene.h>
@@ -37,6 +38,9 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
+// Standard Headers
+#include <cstdio>
+#include <cstdlib>
 #include <iostream>
 
 // Reference: https://github.com/nothings/stb/blob/master/stb_image.h#L4

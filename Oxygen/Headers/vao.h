@@ -1,4 +1,4 @@
-// Oxygen - texture.h
+// Oxygen - vao.h
 //
 // Copyright (C) Jack Maloney 2016
 //
