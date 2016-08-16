@@ -120,10 +120,10 @@ int main(int argc, char* argv[]) {
 
              out vec3 color; out vec2 texcoord;
 
-             uniform mat4 mvp;
+             uniform mat4 model; uniform mat4 view; uniform mat4 proj;
 
              void main() {
-                 gl_Position = mvp * vec4(in_position, 1.0);
+                 gl_Position = proj * view * model * vec4(in_position, 1.0);
                  color = in_color;
                  texcoord = in_texcoord;
              });
@@ -187,20 +187,16 @@ int main(int argc, char* argv[]) {
 
     glGenerateMipmap(GL_TEXTURE_2D);
 
-    glm::mat4 model;
-    model =
-        glm::rotate(model, glm::radians(180.0f), glm::vec3(0.0f, 0.0f, 1.0f));
-
     glm::mat4 view =
         glm::lookAt(glm::vec3(1.5f, 1.5f, 1.5f), glm::vec3(0.0f, 0.0f, 0.0f),
                     glm::vec3(0.0f, 1.0f, 0.0f));
     glm::mat4 proj =
         glm::perspective(glm::radians(75.0f), 800.0f / 800.0f, 0.1f, 100.0f);
 
-    glm::mat4 mvp = proj * view * model;
-
-    glUniformMatrix4fv(shaderProgram.getUniformLocation("mvp"), 1, GL_FALSE,
-                       glm::value_ptr(mvp));
+    glUniformMatrix4fv(shaderProgram.getUniformLocation("view"), 1, GL_FALSE,
+                       glm::value_ptr(view));
+    glUniformMatrix4fv(shaderProgram.getUniformLocation("proj"), 1, GL_FALSE,
+                       glm::value_ptr(proj));
 
     std::cout << glGetError() << std::endl;
 
@@ -214,6 +210,36 @@ int main(int argc, char* argv[]) {
         glClearColor(0.25f, 0.25f, 0.25f, 1.0f);
         glEnable(GL_DEPTH_TEST);
         glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+        glm::mat4 model;
+        model = glm::rotate(model, glm::radians(180.0f),
+                            glm::vec3(0.0f, 0.0f, 1.0f));
+        glUniformMatrix4fv(shaderProgram.getUniformLocation("model"), 1,
+                           GL_FALSE, glm::value_ptr(model));
+
+        glDrawArrays(GL_TRIANGLES, 0, 36);
+
+        model = glm::translate(model, glm::vec3(1.0f, 0.0f, 0.0f));
+        glUniformMatrix4fv(shaderProgram.getUniformLocation("model"), 1,
+                           GL_FALSE, glm::value_ptr(model));
+
+        glDrawArrays(GL_TRIANGLES, 0, 36);
+
+        model = glm::translate(model, glm::vec3(0.0, 0.0f, -1.0f));
+        glUniformMatrix4fv(shaderProgram.getUniformLocation("model"), 1,
+                           GL_FALSE, glm::value_ptr(model));
+
+        glDrawArrays(GL_TRIANGLES, 0, 36);
+
+        model = glm::translate(model, glm::vec3(-1.0f, 0.0f, 0.0f));
+        glUniformMatrix4fv(shaderProgram.getUniformLocation("model"), 1,
+                           GL_FALSE, glm::value_ptr(model));
+
+        glDrawArrays(GL_TRIANGLES, 0, 36);
+
+        model = glm::translate(model, glm::vec3(1.0f, -1.0f, 0.0));
+        glUniformMatrix4fv(shaderProgram.getUniformLocation("model"), 1,
+                           GL_FALSE, glm::value_ptr(model));
 
         glDrawArrays(GL_TRIANGLES, 0, 36);
 
