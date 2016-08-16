@@ -144,13 +144,9 @@ int main(int argc, char* argv[]) {
 
         out vec4 outColor;
 
-        uniform sampler2D texsamp; uniform sampler2D destroysamp;
+        uniform sampler2D texsamp;
 
-        void main() {
-            vec4 texColor = texture(texsamp, texcoord);
-            vec4 destroyColor = texture(destroysamp, texcoord);
-            outColor = mix(texColor, destroyColor, 0.5);
-        });
+        void main() { outColor = texture(texsamp, texcoord); });
     shader fragmentShader = shader(fragmentSource, GL_FRAGMENT_SHADER);
     status = fragmentShader.compile(buffer, 512);
     handleShaderCompileErrors(status, buffer);
@@ -176,20 +172,32 @@ int main(int argc, char* argv[]) {
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 
-    std::string path = assetsDirectoryPath + "/textures/pumpkin.png";
-    texture pumpkinTexture = texture(path.c_str(), GL_TEXTURE0);
-    glUniform1i(shaderProgram.getUniformLocation("texsamp"), 0);
-
+    std::string path = assetsDirectoryPath + "/textures/coal.png";
+    texture coalTexture = texture(path.c_str(), GL_TEXTURE0);
     glGenerateMipmap(GL_TEXTURE_2D);
 
     path = assetsDirectoryPath + "/textures/destroy.png";
     texture destroyTexture = texture(path.c_str(), GL_TEXTURE1);
-    glUniform1i(shaderProgram.getUniformLocation("destroysamp"), 1);
+    glGenerateMipmap(GL_TEXTURE_2D);
 
+    path = assetsDirectoryPath + "/textures/grass.png";
+    texture grassTexture = texture(path.c_str(), GL_TEXTURE2);
+    glGenerateMipmap(GL_TEXTURE_2D);
+
+    path = assetsDirectoryPath + "/textures/hay.png";
+    texture hayTexture = texture(path.c_str(), GL_TEXTURE3);
+    glGenerateMipmap(GL_TEXTURE_2D);
+
+    path = assetsDirectoryPath + "/textures/pumpkin.png";
+    texture pumpkinTexture = texture(path.c_str(), GL_TEXTURE4);
+    glGenerateMipmap(GL_TEXTURE_2D);
+
+    path = assetsDirectoryPath + "/textures/sandstone.png";
+    texture sandstoneTexture = texture(path.c_str(), GL_TEXTURE5);
     glGenerateMipmap(GL_TEXTURE_2D);
 
     glm::mat4 view =
-        glm::lookAt(glm::vec3(8.0f, 10.5f, 11.5f), glm::vec3(8.0f, 0.0f, 0.0f),
+        glm::lookAt(glm::vec3(25.0f, 11.5f, 11.5f), glm::vec3(8.0f, 0.0f, 0.0f),
                     glm::vec3(0.0f, 1.0f, 0.0f));
     glm::mat4 proj =
         glm::perspective(glm::radians(75.0f), 800.0f / 800.0f, 0.1f, 100.0f);
@@ -219,35 +227,34 @@ int main(int argc, char* argv[]) {
                 m = glm::translate(m, glm::vec3(1.0f, 0.0f, 0.0f));
                 glUniformMatrix4fv(shaderProgram.getUniformLocation("model"), 1,
                                    GL_FALSE, glm::value_ptr(m));
-                glDrawArrays(GL_TRIANGLES, 0, 36);
+                GLint texsamp = shaderProgram.getUniformLocation("texsamp");
+
+                // pumpkin
+                glUniform1i(texsamp, 4);
+                glDrawArrays(GL_TRIANGLES, 0, 6);
+
+                // grass
+                glUniform1i(texsamp, 2);
+                glDrawArrays(GL_TRIANGLES, 6, 6);
+
+                // coal
+                glUniform1i(texsamp, 0);
+                glDrawArrays(GL_TRIANGLES, 12, 6);
+
+                // sandstone
+                glUniform1i(texsamp, 5);
+                glDrawArrays(GL_TRIANGLES, 18, 6);
+
+                // hay
+                glUniform1i(texsamp, 3);
+                glDrawArrays(GL_TRIANGLES, 24, 6);
+
+                // destroy
+                glUniform1i(texsamp, 1);
+                glDrawArrays(GL_TRIANGLES, 30, 6);
             }
         }
 
-        /*
-                model = glm::translate(model, glm::vec3(1.0f, 0.0f, 0.0f));
-                glUniformMatrix4fv(shaderProgram.getUniformLocation("model"), 1,
-                                   GL_FALSE, glm::value_ptr(model));
-
-                glDrawArrays(GL_TRIANGLES, 0, 36);
-
-                model = glm::translate(model, glm::vec3(0.0, 0.0f, -1.0f));
-                glUniformMatrix4fv(shaderProgram.getUniformLocation("model"), 1,
-                                   GL_FALSE, glm::value_ptr(model));
-
-                glDrawArrays(GL_TRIANGLES, 0, 36);
-
-                model = glm::translate(model, glm::vec3(-1.0f, 0.0f, 0.0f));
-                glUniformMatrix4fv(shaderProgram.getUniformLocation("model"), 1,
-                                   GL_FALSE, glm::value_ptr(model));
-
-                glDrawArrays(GL_TRIANGLES, 0, 36);
-
-                model = glm::translate(model, glm::vec3(1.0f, -1.0f, 0.0));
-                glUniformMatrix4fv(shaderProgram.getUniformLocation("model"), 1,
-                                   GL_FALSE, glm::value_ptr(model));
-
-                glDrawArrays(GL_TRIANGLES, 0, 36);
-        */
         // Flip Buffers and Draw
         glfwSwapBuffers(mWindow);
         glfwPollEvents();
