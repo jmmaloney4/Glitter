@@ -12,6 +12,8 @@
 
 #include "glitter.h"
 
+#define GLSL(code) "#version 150\n" #code
+
 namespace oxygen {
     class shader {
       private:

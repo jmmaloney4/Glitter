@@ -77,34 +77,36 @@ int main(int argc, char* argv[]) {
 
     // Vertex Shader
     const char* vertexSource =
-        "#version 150\n"
-        "in vec2 in_position;\n"
-        "in vec3 in_color;\n"
-        "in vec2 in_texcoord;\n"
-        "out vec3 color;\n"
-        "out vec2 texcoord;\n"
-        "uniform mat4 mvp;\n"
-        "void main() {\n"
-        "gl_Position = mvp * vec4(in_position, 0.0, 1.0);\n"
-        "color = in_color;\n"
-        "texcoord = in_texcoord; }";
+        GLSL(in vec2 in_position; in vec3 in_color; in vec2 in_texcoord;
+
+             out vec3 color; out vec2 texcoord;
+
+             uniform mat4 mvp;
+
+             void main() {
+                 gl_Position = mvp * vec4(in_position, 0.0, 1.0);
+                 color = in_color;
+                 texcoord = in_texcoord;
+             });
     char buffer[512];
     shader vertexShader = shader(vertexSource, GL_VERTEX_SHADER);
     GLint status = vertexShader.compile(buffer, 512);
     handleShaderCompileErrors(status, buffer);
 
     // Fragment Shader
-    const char* fragmentSource =
-        "#version 150\n"
-        "in vec3 color;\n"
-        "in vec2 texcoord;\n"
-        "out vec4 outColor;\n"
-        "uniform sampler2D texsamp;\n"
-        "uniform sampler2D destroysamp;\n"
-        "void main() { \n"
-        "vec4 texColor = texture(texsamp, texcoord);\n"
-        "vec4 destroyColor = texture(destroysamp, texcoord);\n"
-        "outColor = mix(texColor, destroyColor, 0.5); }\n";
+    const char* fragmentSource = GLSL(
+
+        in vec3 color; in vec2 texcoord;
+
+        out vec4 outColor;
+
+        uniform sampler2D texsamp; uniform sampler2D destroysamp;
+
+        void main() {
+            vec4 texColor = texture(texsamp, texcoord);
+            vec4 destroyColor = texture(destroysamp, texcoord);
+            outColor = mix(texColor, destroyColor, 0.5);
+        });
     shader fragmentShader = shader(fragmentSource, GL_FRAGMENT_SHADER);
     status = fragmentShader.compile(buffer, 512);
     handleShaderCompileErrors(status, buffer);
@@ -151,14 +153,14 @@ int main(int argc, char* argv[]) {
         glm::rotate(model, glm::radians(180.0f), glm::vec3(0.0f, 0.0f, 1.0f));
 
     glm::mat4 view =
-        glm::lookAt(glm::vec3(1.2f, 1.2f, 1.2f), glm::vec3(0.0f, 0.0f, 0.0f),
-                    glm::vec3(0.0f, 0.0f, 1.0f));
+        glm::lookAt(glm::vec3(0.0f, 1.5f, 1.5f), glm::vec3(0.0f, 0.0f, 0.0f),
+                    glm::vec3(0.0f, 1.0f, 0.0f));
     glm::mat4 proj =
-        glm::perspective(glm::radians(75.0f), 800.0f / 800.0f, 1.0f, 10.0f);
+        glm::perspective(glm::radians(75.0f), 800.0f / 800.0f, 0.1f, 100.0f);
 
-    glm::mat4 mvp = view * model * proj;
+    glm::mat4 mvp = proj * view * model;
 
-    glm::vec4 result = mvp * glm::vec4(0.0f, 0.0f, 0.0f, 1.0f);
+    glm::vec4 result = mvp * glm::vec4(0.5f, 0.5f, 0.0f, 1.0f);
     printf("%f, %f, %f\n", result.x, result.y, result.z);
 
     glUniformMatrix4fv(shaderProgram.getUniformLocation("mvp"), 1, GL_FALSE,
