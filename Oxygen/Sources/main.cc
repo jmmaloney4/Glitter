@@ -30,8 +30,12 @@ int main(int argc, char* argv[]) {
     glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
     glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
     glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
-    auto mWindow =
-        glfwCreateWindow(mWidth, mHeight, "Oxygen", nullptr, nullptr);
+
+    const GLFWvidmode* mode = glfwGetVideoMode(glfwGetPrimaryMonitor());
+    auto mWindow = glfwCreateWindow(mode->width, mode->height, "Oxygen",
+                                    glfwGetPrimaryMonitor(), nullptr);
+
+    glfwSetInputMode(mWindow, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
 
     // Check for Valid Context
     if (mWindow == nullptr) {
@@ -191,8 +195,9 @@ int main(int argc, char* argv[]) {
     glm::mat4 view =
         glm::lookAt(glm::vec3(25.0f, 7.5f, 6.5f), glm::vec3(8.0f, 0.0f, 0.0f),
                     glm::vec3(0.0f, 1.0f, 0.0f));
-    glm::mat4 proj =
-        glm::perspective(glm::radians(60.0f), 800.0f / 800.0f, 0.1f, 100.0f);
+    glm::mat4 proj = glm::perspective(
+        glm::radians(60.0f), (float) mode->width / (float) mode->height, 0.1f,
+        100.0f);
 
     glUniformMatrix4fv(shaderProgram.getUniformLocation("view"), 1, GL_FALSE,
                        glm::value_ptr(view));

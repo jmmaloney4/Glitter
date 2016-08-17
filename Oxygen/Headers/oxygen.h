@@ -11,6 +11,7 @@
 #pragma once
 
 #include "fps.h"
+#include "player.h"
 #include "program.h"
 #include "shader.h"
 #include "texture.h"
